@@ -1,0 +1,225 @@
+<html>
+<style>
+body {
+    width: 500px;
+    line-height:16px;
+    background-color: #def;
+    font-family: "Lato",sans-serif;
+    font-size: 13px;
+    color: #555;
+    margin: 30px;
+}
+h2 {
+    font-size: 14px;
+    font-style: bold;
+    color: #0d0ed5;
+}
+.title {
+    color: #0d0ed5;
+    font-size: 14px;
+    font-style: bold;
+}
+a {
+    color: #0d0ed5;
+    font-size: 13px;
+}
+p {
+}
+</style>
+<body>
+<img src="twitter-bot-icon.png" width=100><p>
+<a href="Tweeter-latest.zip" class="title"><b>Download Tweeter</b></a>&nbsp; &nbsp; 
+<a href="doc" class="title"><b>Javadocs </b></a>
+
+<p>
+
+<i>Note: this is not considered a production library, it is intended for teaching purposes </i>
+
+<p><br>
+
+<h2>How to install Tweeter </h2>
+
+<p>
+                      
+Contributed libraries must be downloaded separately and placed within 
+the "libraries" folder of your Processing sketchbook. To find the Processing 
+sketchbook location on your computer, open the Preferences window from the 
+Processing application and look for the "Sketchbook location" item at the top. 
+
+<p>
+Copy the Tweeter folder into the "libraries" folder at this location. 
+You will need to create the "libraries" folder if this is your first contributed library. 
+
+<p>
+By default the following locations are used for your sketchbook folder.
+For mac users the sketchbook folder is located inside ~/Documents/Processing. 
+for windows users the sketchbook folder is located inside folder 'My Documents'/Processing
+
+<p>
+
+After installing Tweeter, restart processing.
+               
+<p><br>
+
+<h2>Including your Twitter API keys </h2>
+
+If you don't have the (4) necessary keys, follow <a href="http://www.gabfirethemes.com/create-twitter-api-key/" target=_blank">these instructions</a>.  <p>
+Then add your keys as variables to the lines below, replacing <br>%XYZ_KEY% with your key data from Twitter:
+
+<br>
+
+<pre>
+import tweeter.*;
+
+String ckey = "%CONSUMER_KEY%";
+String csec = "%CONSUMER_SECRET%";
+String atok = "%ACCESS_TOKEN_KEY%";
+String asec = "%ACCESS_TOKEN_SECRET%";
+</pre>
+<br>
+<i>Note: ALL examples below require the following 5 lines<br> (with your API key info) at the top of the sketch</i>
+<p><br>
+
+<h2>Example:  searching for tweets</h2> // (thanks to Jer Thorp)
+
+<pre>
+String query = "digital art";
+
+int tweetIdx = 0;
+Tweeter tweeter;
+String[] tweets;
+
+void setup()
+{
+  size(800, 600);
+
+  tweeter = new Tweeter(ckey, csec, atok, asec);
+  tweeter.search(query, 20);
+  tweets = tweeter.resultTexts();
+}
+
+void draw()
+{
+  fill(0, 40);
+  rect(0, 0, width, height);
+
+  if (++tweetIdx >= tweets.length)
+    tweetIdx = 0;
+
+  fill(200);
+  text(tweets[tweetIdx], random(width), random(height), 300, 200);
+
+  delay(250);
+}
+</pre>
+<p><br>
+     
+<i>Note: when fetching tweets for a user or a keyword, the default request will return a maximum of 100 items. To get more results, you can supply a higher number as an additional argument. Passing -1 for this argument will cause the function to try to fetch ALL items. However, be warned that a separate request is issued for every 100 items, so, if you are using the rate-limited API, this may quickly exhaust your supply of queries.</i> 
+       
+<p><br>
+                             
+<h2>Example: posting a single tweet </h2>
+
+<pre>
+Tweeter tweeter = new Tweeter(ckey, csec, atok, asec); 
+tweeter.post(text);
+</pre>
+
+<p><br>
+<h2>Example: a simple TwitterBot </h2>
+
+<p>
+<pre>
+Tweeter tweeter; 
+String aTweet;
+
+void setup()
+{
+  tweeter = new Tweeter(ckey, csec, atok, asec); 
+}
+
+void draw()
+{
+  createTweet();
+  tweeter.post(aTweet);
+  delay(30 * 60 * 1000); // every 30 minutes
+}
+
+void createTweet() {
+  
+  // create each tweet here
+  aTweet = "Test: "+millis();
+}
+</pre>
+<p><br>
+<h2>Example: accessing  the full Twitter4j API </h2>
+<p>
+<pre>
+import twitter4j.*;
+ 
+Tweeter tweeter = new Tweeter(ckey, csec, atok, asec); 
+
+Twitter twitter4j = tweeter.twitter4j;
+
+try
+{
+  String policy = twitter4j.getPrivacyPolicy();
+  println(policy);
+}
+catch (TwitterException e)
+{
+  e.printStackTrace();
+}
+</pre>
+<p><br>
+
+<h2>Example: a search that auto-refreshes</h2> // (thanks to Jer Thorp)
+
+<pre>
+String query = "love";
+int tweetIdx = 0;
+Tweeter tweeter;
+String[] tweets;
+
+void setup()
+{
+  size(800, 600);
+
+  tweeter = new Tweeter(ckey, csec, atok, asec);
+  tweeter.search(query);
+  tweets = tweeter.resultTexts();
+  thread("refresh");
+}
+
+void draw()
+{
+  fill(0, 40);
+  rect(0, 0, width, height);
+
+  if (++tweetIdx >= tweets.length)
+    tweetIdx = 0;
+
+  fill(200);
+  text(tweets[tweetIdx], random(width), random(height), 300, 200);
+
+  delay(250);
+}
+
+void refresh()
+{
+  while (true)
+  {
+    tweeter.search(query);
+    tweets = tweeter.resultTexts();
+
+    println("Refresh Tweets");
+
+    delay(20000); // wait 20 sec
+  }
+}
+</pre>
+<p><br>
+
+
+</body>
+</html>

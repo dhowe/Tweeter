@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<project name="Tweeter" default="javadoc">
+    <target name="javadoc">
+        <javadoc access="public" 
+            classpath="/Applications/eclipse/plugins/org.junit_4.11.0.v201303080030/junit.jar:../RiTa/bin:../RiTa/libs/core.jar:../RiTa/libs/junit.jar:twitter4j-core-4.0.2.jar:core.jar" 
+            destdir="doc" doctitle="Tweeter API" nodeprecated="true" nodeprecatedlist="true" 
+            nonavbar="true" notree="true" packagenames="tweeter" source="1.7" noindex="true" docletpath="bin" 
+            splitindex="false" use="false" version="false" doclet="com.tonicsystems.doclet.ExcludeDoclet" >
+			<fileset dir="src" defaultexcludes="yes">
+			  <include name="tweeter/**"/>
+			  <exclude name="test/**"/>
+			</fileset>
+		</javadoc>
+    </target>
+</project>
+

@@ -2,6 +2,7 @@ package test.sketches;
 
 import java.util.Date;
 
+import processing.core.PApplet;
 import test.TwitterConfig;
 import tweeter.Tweeter;
 
@@ -32,5 +33,11 @@ public class TwitterPost extends TwitterConfig
     fill(200);
     text(text, 200, 100);
   }
+  
+  public static void main(String[] args) {
+  	
+		PApplet.main(new String[]{ TwitterPost.class.getName() });
+	}
+  
   
 }
